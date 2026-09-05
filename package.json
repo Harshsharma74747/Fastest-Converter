@@ -1,0 +1,30 @@
+{
+  "name": "turbo-media-converter",
+  "version": "1.0.0",
+  "description": "Lightning-Fast Video and Audio Converter featuring Instant MOV to MP4 Stream Remuxing",
+  "main": "server.js",
+  "bin": {
+    "turboconvert": "cli.js"
+  },
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node server.js",
+    "build": "echo TurboConvert does not require compilation. Ready to launch with start.bat or npm start."
+  },
+  "keywords": [
+    "ffmpeg",
+    "video-converter",
+    "audio-converter",
+    "mov-to-mp4",
+    "stream-copy",
+    "remux",
+    "fastest"
+  ],
+  "author": "Antigravity",
+  "license": "MIT",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^4.21.2",
+    "multer": "^1.4.5-lts.1"
+  }
+}
