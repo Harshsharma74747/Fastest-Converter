@@ -1,0 +1,469 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Lightning-fast video and audio converter. The fastest way to convert MOV to MP4 with 100% lossless stream remuxing in under a second.">
+  <title>TurboConvert | Fastest MOV to MP4 & Media Converter</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <!-- Background Glow Accents -->
+  <div class="glow-orb glow-1"></div>
+  <div class="glow-orb glow-2"></div>
+
+  <div class="app-container">
+    <!-- Header -->
+    <header class="navbar">
+      <div class="brand">
+        <div class="logo-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon>
+          </svg>
+        </div>
+        <div class="brand-text">
+          <h1>Turbo<span>Convert</span></h1>
+          <span class="badge-sub">Ultra-Fast Media Engine</span>
+        </div>
+      </div>
+      <div class="header-right">
+        <div id="hwAccelBadge" class="hw-badge" title="Hardware Acceleration Status">
+          <span class="status-dot"></span>
+          <span id="hwAccelText">Detecting Hardware...</span>
+        </div>
+        <a href="#quickGuide" class="btn-ghost help-link" id="guideBtn">⚡ Why So Fast?</a>
+      </div>
+    </header>
+
+    <!-- Hero Banner -->
+    <section class="hero-section">
+      <div class="hero-chip">
+        <span class="chip-spark">⚡</span>
+        <span>Instant Remux Technology &bull; 0.5s Conversion &bull; Zero Quality Loss</span>
+      </div>
+      <h2 class="hero-title">The Fastest MOV to MP4 <br><span class="gradient-text">Instant Stream Converter</span></h2>
+      <p class="hero-subtitle">
+        Eliminates slow frame-by-frame re-encoding. Converts gigabyte-sized MOV videos to MP4 in seconds using direct stream copy, plus full audio extraction and universal format support.
+      </p>
+    </section>
+
+    <!-- Main Workspace Card -->
+    <main class="main-card glass-panel">
+      <!-- Drag & Drop Upload Zone -->
+      <section id="dropZone" class="drop-zone">
+        <input type="file" id="fileInput" class="file-input" accept="video/*,audio/*,.mov,.mp4,.mkv,.webm,.avi,.flv,.mp3,.wav,.aac,.m4a,.flac" />
+        <div class="drop-content">
+          <div class="upload-icon-wrapper">
+            <svg class="upload-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+              <polyline points="17 8 12 3 7 8"></polyline>
+              <line x1="12" y1="3" x2="12" y2="15"></line>
+            </svg>
+            <div class="speed-rings"></div>
+          </div>
+          <h3>Drag & Drop Video or Audio Files</h3>
+          <p class="drop-sub">Select any <strong>.MOV, .MP4, .MKV, .WebM, .MP3, .WAV</strong> file</p>
+          <div class="btn-group">
+            <button type="button" id="browseBtn" class="btn btn-primary">
+              <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg>
+              Choose Media File
+            </button>
+            <button type="button" id="sampleMovBtn" class="btn btn-secondary">
+              ⚡ Test with Sample MOV
+            </button>
+          </div>
+          <div class="file-limits">Supports all resolutions (4K, 1080p, 60fps) up to 10GB</div>
+        </div>
+      </section>
+
+      <!-- Local File Path Direct Input (Power User) -->
+      <div class="local-path-toggle-row">
+        <button type="button" id="togglePathBtn" class="toggle-link">
+          <span>📁 Advanced: Select directly from Windows local path (Zero-copy)</span>
+        </button>
+      </div>
+      <div id="localPathContainer" class="local-path-box hidden">
+        <div class="input-with-btn">
+          <input type="text" id="localPathInput" placeholder="e.g. C:\Users\Username\Videos\my_recording.mov" />
+          <button type="button" id="probePathBtn" class="btn btn-secondary">Inspect File</button>
+        </div>
+      </div>
+
+      <!-- File Probed Details Card (Hidden until file selected) -->
+      <section id="inspectionCard" class="inspection-card hidden">
+        <div class="card-header">
+          <div class="file-title-group">
+            <div class="file-type-icon" id="fileTypeIcon">MOV</div>
+            <div>
+              <h3 id="inspectedFileName" class="file-name">my_video.mov</h3>
+              <div class="file-meta-tags" id="fileMetaTags">
+                <span class="meta-tag" id="metaSize">124 MB</span>
+                <span class="meta-tag" id="metaDuration">00:02:15</span>
+                <span class="meta-tag" id="metaResolution">1920x1080</span>
+                <span class="meta-tag" id="metaFps">60 fps</span>
+              </div>
+            </div>
+          </div>
+          <button type="button" id="changeFileBtn" class="btn-ghost btn-sm">Change File</button>
+        </div>
+
+        <!-- Codec Badges Row -->
+        <div class="codec-row">
+          <div class="codec-item">
+            <span class="codec-label">Video Stream</span>
+            <span class="codec-val" id="codecVideo">H.264 / AVC</span>
+          </div>
+          <div class="codec-arrow">&rarr;</div>
+          <div class="codec-item">
+            <span class="codec-label">Audio Stream</span>
+            <span class="codec-val" id="codecAudio">AAC (Stereo)</span>
+          </div>
+          <div class="codec-item quality-box">
+            <span class="codec-label">Estimated Speed</span>
+            <span class="codec-val speed-val" id="estimatedSpeed">⚡ 1,000x+ (Instant)</span>
+          </div>
+        </div>
+
+        <!-- Intelligent Recommendation Alert -->
+        <div id="recommendationAlert" class="recommendation-banner banner-instant">
+          <div class="banner-icon">⚡</div>
+          <div class="banner-text">
+            <strong id="recTitle">Instant Lossless Remux Recommended!</strong>
+            <p id="recDesc">This MOV file uses H.264 video. We can remux it directly into MP4 without touching a single pixel. Conversion will take under 1 second with 100% zero quality loss!</p>
+          </div>
+        </div>
+
+        <!-- Conversion Mode Navigation Tabs -->
+        <div class="mode-tabs">
+          <button type="button" class="tab-btn active" data-tab="turboMov">
+            <span class="tab-icon">⚡</span>
+            <span>Turbo MOV &rarr; MP4</span>
+            <span class="tab-pill">Fastest</span>
+          </button>
+          <button type="button" class="tab-btn" data-tab="universalVideo">
+            <span class="tab-icon">🎬</span>
+            <span>Universal Video</span>
+          </button>
+          <button type="button" class="tab-btn" data-tab="audioOnly">
+            <span class="tab-icon">🎵</span>
+            <span>Audio Extractor</span>
+          </button>
+          <button type="button" class="tab-btn" data-tab="trimCut">
+            <span class="tab-icon">✂️</span>
+            <span>Trim & Cut</span>
+          </button>
+        </div>
+
+        <!-- Tab 1: Turbo MOV to MP4 -->
+        <div id="tab-turboMov" class="tab-pane active">
+          <div class="preset-cards">
+            <label class="radio-card selected" id="optInstantRemux">
+              <input type="radio" name="turboMode" value="instant-remux" checked>
+              <div class="radio-card-content">
+                <div class="card-head">
+                  <span class="badge-accent">Recommended</span>
+                  <h4>⚡ Instant Stream Copy (Lossless)</h4>
+                </div>
+                <p>Direct bitstream remuxing. Converts in <strong>0.5 - 1.5 seconds</strong>. Preserves 100% original video/audio quality with zero compression loss.</p>
+                <div class="card-spec">Command: <code>-c copy -movflags +faststart</code></div>
+              </div>
+            </label>
+
+            <label class="radio-card" id="optSmartPassthrough">
+              <input type="radio" name="turboMode" value="smart-passthrough">
+              <div class="radio-card-content">
+                <div class="card-head">
+                  <span class="badge-cyan">Camera / iPhone</span>
+                  <h4>🚀 Smart Passthrough (Video Copy + AAC Audio)</h4>
+                </div>
+                <p>Copies the heavy video stream untouched in ~1s and only encodes audio to standard AAC. Perfect for MOV files with uncompressed PCM audio.</p>
+                <div class="card-spec">Command: <code>-c:v copy -c:a aac -b:a 192k</code></div>
+              </div>
+            </label>
+
+            <label class="radio-card" id="optHardwareFast">
+              <input type="radio" name="turboMode" value="reencode-fast">
+              <div class="radio-card-content">
+                <div class="card-head">
+                  <span class="badge-purple">Universal</span>
+                  <h4>🔥 Fast Hardware Re-encode</h4>
+                </div>
+                <p>Re-encodes with GPU acceleration (NVENC/QSV/AMF) or Ultrafast CPU. Ideal for ProRes, DNxHD, or files needing resizing or size compression.</p>
+                <div class="card-spec">Command: <code>-c:v h264_nvenc/ultrafast -crf 22</code></div>
+              </div>
+            </label>
+          </div>
+        </div>
+
+        <!-- Tab 2: Universal Video -->
+        <div id="tab-universalVideo" class="tab-pane hidden">
+          <div class="settings-grid">
+            <div class="setting-col">
+              <label for="videoFormatSelect">Output Container</label>
+              <select id="videoFormatSelect" class="form-select">
+                <option value="mp4" selected>MP4 (Universal .mp4)</option>
+                <option value="mkv">MKV (Matroska .mkv)</option>
+                <option value="webm">WebM (HTML5 Web .webm)</option>
+                <option value="avi">AVI (.avi)</option>
+                <option value="gif">Animated GIF (.gif)</option>
+              </select>
+            </div>
+
+            <div class="setting-col">
+              <label for="resolutionSelect">Resolution Scale</label>
+              <select id="resolutionSelect" class="form-select">
+                <option value="original" selected>Keep Original Resolution</option>
+                <option value="4k">4K Ultra HD (2160p)</option>
+                <option value="1080p">Full HD (1080p)</option>
+                <option value="720p">HD (720p)</option>
+                <option value="480p">SD (480p - Smallest)</option>
+              </select>
+            </div>
+
+            <div class="setting-col">
+              <label for="speedPresetSelect">Encoder Preset</label>
+              <select id="speedPresetSelect" class="form-select">
+                <option value="ultrafast" selected>⚡ Ultra Fast (Fastest encode)</option>
+                <option value="veryfast">Very Fast</option>
+                <option value="fast">Fast</option>
+                <option value="medium">Medium (Standard)</option>
+              </select>
+            </div>
+
+            <div class="setting-col">
+              <label for="crfRange">Visual Quality (CRF: <span id="crfValue">22</span>)</label>
+              <input type="range" id="crfRange" min="16" max="32" value="22" class="range-slider">
+              <div class="range-labels">
+                <span>Near Lossless (16)</span>
+                <span>Balanced (22)</span>
+                <span>Compact (32)</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Tab 3: Audio Extractor -->
+        <div id="tab-audioOnly" class="tab-pane hidden">
+          <div class="audio-banner">
+            <div class="audio-banner-icon">🎵</div>
+            <div>
+              <h4>Extract Soundtrack or Convert Audio</h4>
+              <p>Extract crystal-clear audio from any video without rendering video frames.</p>
+            </div>
+          </div>
+          <div class="settings-grid">
+            <div class="setting-col">
+              <label for="audioFormatSelect">Audio Format</label>
+              <select id="audioFormatSelect" class="form-select">
+                <option value="mp3" selected>MP3 (Universal Audio)</option>
+                <option value="wav">WAV (Uncompressed Lossless 16-bit)</option>
+                <option value="flac">FLAC (Lossless Compressed)</option>
+                <option value="aac">AAC (.m4a / .aac)</option>
+                <option value="m4a">Apple M4A (.m4a)</option>
+                <option value="ogg">OGG Vorbis (.ogg)</option>
+              </select>
+            </div>
+
+            <div class="setting-col">
+              <label for="audioBitrateSelect">Audio Quality & Bitrate</label>
+              <select id="audioBitrateSelect" class="form-select">
+                <option value="320k" selected>320 kbps (Extreme High Quality)</option>
+                <option value="256k">256 kbps (Studio Quality)</option>
+                <option value="192k">192 kbps (Standard High)</option>
+                <option value="128k">128 kbps (Compact)</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <!-- Tab 4: Trim & Cut -->
+        <div id="tab-trimCut" class="tab-pane hidden">
+          <div class="trim-container">
+            <div class="trim-inputs">
+              <div class="trim-field">
+                <label for="trimStart">Start Time (HH:MM:SS)</label>
+                <input type="text" id="trimStart" placeholder="00:00:00" class="time-input" />
+              </div>
+              <div class="trim-sep">&rarr;</div>
+              <div class="trim-field">
+                <label for="trimEnd">End Time (HH:MM:SS)</label>
+                <input type="text" id="trimEnd" placeholder="00:00:30" class="time-input" />
+              </div>
+            </div>
+            <p class="trim-hint">Leave blank to convert the entire duration.</p>
+          </div>
+        </div>
+
+        <!-- Action Row -->
+        <div class="action-footer">
+          <div class="action-summary" id="actionSummary">
+            Ready to convert with <strong>⚡ Instant Stream Copy</strong>
+          </div>
+          <button type="button" id="startConvertBtn" class="btn btn-convert">
+            <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.2">
+              <polygon points="5 3 19 12 5 21 5 3"></polygon>
+            </svg>
+            <span id="convertBtnText">Convert to MP4 Now</span>
+          </button>
+        </div>
+      </section>
+
+      <!-- Conversion Live Progress Dashboard -->
+      <section id="progressDashboard" class="progress-dashboard hidden">
+        <div class="progress-card">
+          <div class="progress-status-header">
+            <div class="status-indicator-pulse"></div>
+            <div>
+              <h3 id="progressStatusTitle">Converting Media...</h3>
+              <p id="progressStatusSubtitle" class="status-sub">Applying ultra-fast remuxing pipeline</p>
+            </div>
+          </div>
+
+          <!-- Progress Bar & Gauge -->
+          <div class="progress-bar-container">
+            <div class="progress-bar-track">
+              <div id="progressBarFill" class="progress-bar-fill" style="width: 0%"></div>
+            </div>
+            <div class="progress-percent" id="progressPercent">0%</div>
+          </div>
+
+          <!-- Live Metrics Grid -->
+          <div class="metrics-grid">
+            <div class="metric-card">
+              <div class="metric-label">Processing Speed</div>
+              <div class="metric-value speed-highlight" id="metricSpeed">--</div>
+            </div>
+            <div class="metric-card">
+              <div class="metric-label">Elapsed Time</div>
+              <div class="metric-value" id="metricElapsed">0.0s</div>
+            </div>
+            <div class="metric-card">
+              <div class="metric-label">Estimated Remaining</div>
+              <div class="metric-value" id="metricEta">--</div>
+            </div>
+            <div class="metric-card">
+              <div class="metric-label">Rendered FPS</div>
+              <div class="metric-value" id="metricFps">--</div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Completed Success Card -->
+      <section id="successCard" class="success-card hidden">
+        <div class="success-header">
+          <div class="success-badge-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="20 6 9 17 4 12"></polyline>
+            </svg>
+          </div>
+          <div>
+            <h3>Conversion Completed in <span id="doneTimeTaken" class="highlight-time">0.48 seconds</span>!</h3>
+            <p id="doneSubtitle">100% Lossless & Universal MP4 ready for playback everywhere.</p>
+          </div>
+        </div>
+
+        <!-- Size Comparison -->
+        <div class="size-compare-box">
+          <div class="size-item">
+            <span class="size-label">Input File</span>
+            <span class="size-val" id="doneOriginalSize">--</span>
+          </div>
+          <div class="size-arrow">&rarr;</div>
+          <div class="size-item">
+            <span class="size-label">Converted Output</span>
+            <span class="size-val highlight-size" id="doneOutputSize">--</span>
+          </div>
+          <div class="size-badge" id="doneModeBadge">⚡ Instant Copy</div>
+        </div>
+
+        <!-- In-Browser Video/Audio Player Preview -->
+        <div class="preview-container">
+          <h4>Converted File Preview</h4>
+          <div class="media-player-wrapper" id="playerWrapper">
+            <!-- Dynamically inserted video or audio tag -->
+            <video id="previewVideo" controls playsinline class="preview-media"></video>
+            <audio id="previewAudio" controls class="preview-media hidden"></audio>
+          </div>
+        </div>
+
+        <!-- Download & Open Actions -->
+        <div class="success-actions">
+          <a id="downloadLink" href="#" class="btn btn-primary btn-large" download>
+            <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>
+            Download Converted File
+          </a>
+          <button type="button" id="openFolderBtn" class="btn btn-secondary btn-large">
+            <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg>
+            Show in Windows Folder
+          </button>
+          <button type="button" id="convertAnotherBtn" class="btn btn-ghost">
+            + Convert Another File
+          </button>
+        </div>
+      </section>
+    </main>
+
+    <!-- Recent History Section -->
+    <section class="history-section glass-panel">
+      <div class="history-header">
+        <div class="history-title">
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+          <h3>Recent Session Conversions</h3>
+        </div>
+        <span class="history-count" id="historyCount">0 items</span>
+      </div>
+      <div class="history-table-wrapper">
+        <table class="history-table">
+          <thead>
+            <tr>
+              <th>File Name</th>
+              <th>Format</th>
+              <th>Mode</th>
+              <th>Time</th>
+              <th>Output Size</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody id="historyTableBody">
+            <tr class="empty-row">
+              <td colspan="6">No files converted yet in this session. Drop a file above to begin!</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- Speed Guide / Educational Section -->
+    <section id="quickGuide" class="guide-section glass-panel">
+      <h3>⚡ How TurboConvert Achieves Sub-Second MOV to MP4 Conversion</h3>
+      <div class="guide-grid">
+        <div class="guide-card">
+          <div class="guide-num">01</div>
+          <h4>Direct Stream Remuxing</h4>
+          <p>Apple MOV and MP4 share the same underlying ISO Base Media file structure and codecs (H.264 / HEVC). Instead of slowly re-compressing millions of pixels, our engine repackages the packets directly at disk read/write speeds (1,000x - 5,000x real-time speed).</p>
+        </div>
+        <div class="guide-card">
+          <div class="guide-num">02</div>
+          <h4>Zero Lossless Fidelity</h4>
+          <p>Because no re-encoding occurs in stream copy mode, quality loss is mathematically <strong>0.00%</strong>. Every frame, keyframe, and color profile remains 100% identical to the original recording.</p>
+        </div>
+        <div class="guide-card">
+          <div class="guide-num">03</div>
+          <h4>Smart PCM Audio Fallback</h4>
+          <p>Many professional cameras record uncompressed PCM audio into MOV containers. Standard MP4 players require AAC. Our smart engine copies the heavy 4K video instantly while transcoding only the audio stream in ~1 second.</p>
+        </div>
+      </div>
+    </section>
+
+    <footer class="footer">
+      <p>TurboConvert &bull; High-Performance Audio & Video Converter &bull; Powered by FFmpeg</p>
+    </footer>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
